@@ -1,0 +1,335 @@
+@PR9_HostAddress = http://localhost:5068
+
+### =========================================================================
+### 1. PRODUCT
+### =========================================================================
+
+### 1.1 GET all products (Пагинация)
+GET {{PR9_HostAddress}}/api/Product?page=1&pageSize=10
+Accept: application/json
+
+### 1.2 GET product by ID
+GET {{PR9_HostAddress}}/api/Product/1
+Accept: application/json
+
+### 1.3 POST create product
+POST {{PR9_HostAddress}}/api/Product
+Content-Type: application/json
+
+{
+  "title": "Ноутбук Gaming Pro",
+  "price": 89990.00,
+  "categoryId": 1,
+  "imagePath": "images/laptop.png"
+}
+
+### 1.4 PUT update product (Полная замена)
+PUT {{PR9_HostAddress}}/api/Product/1
+Content-Type: application/json
+
+{
+  "title": "Ноутбук Gaming Pro Ultra",
+  "price": 95990.00,
+  "categoryId": 1,
+  "imagePath": "images/laptop_ultra.png"
+}
+
+### 1.5 PATCH product (Merge Patch — частичное обновление)
+PATCH {{PR9_HostAddress}}/api/Product/1
+Content-Type: application/json
+
+{
+  "price": 84990.00
+}
+
+### 1.6 DELETE product
+DELETE {{PR9_HostAddress}}/api/Product/1
+
+### =========================================================================
+### 2. CATEGORY
+### =========================================================================
+
+### 2.1 GET all categories
+GET {{PR9_HostAddress}}/api/Category?page=1&pageSize=10
+Accept: application/json
+
+### 2.2 GET category by ID
+GET {{PR9_HostAddress}}/api/Category/1
+Accept: application/json
+
+### 2.3 POST create category
+POST {{PR9_HostAddress}}/api/Category
+Content-Type: application/json
+
+{
+  "title": "Компьютерная периферия"
+}
+
+### 2.4 PUT update category
+PUT {{PR9_HostAddress}}/api/Category/1
+Content-Type: application/json
+
+{
+  "title": "Периферия и аксессуары"
+}
+
+### 2.5 PATCH category
+PATCH {{PR9_HostAddress}}/api/Category/1
+Content-Type: application/json
+
+{
+  "title": "Периферийные устройства"
+}
+
+### 2.6 DELETE category
+DELETE {{PR9_HostAddress}}/api/Category/1
+
+### =========================================================================
+### 3. ROLE
+### =========================================================================
+
+### 3.1 GET all roles
+GET {{PR9_HostAddress}}/api/Role?page=1&pageSize=10
+Accept: application/json
+
+### 3.2 GET role by ID
+GET {{PR9_HostAddress}}/api/Role/1
+Accept: application/json
+
+### 3.3 POST create role
+POST {{PR9_HostAddress}}/api/Role
+Content-Type: application/json
+
+{
+  "title": "Manager"
+}
+
+### 3.4 PUT update role
+PUT {{PR9_HostAddress}}/api/Role/1
+Content-Type: application/json
+
+{
+  "title": "Administrator"
+}
+
+### 3.5 PATCH role
+PATCH {{PR9_HostAddress}}/api/Role/1
+Content-Type: application/json
+
+{
+  "title": "SuperAdmin"
+}
+
+### 3.6 DELETE role
+DELETE {{PR9_HostAddress}}/api/Role/1
+
+### =========================================================================
+### 4. USER
+### =========================================================================
+
+### 4.1 GET all users
+GET {{PR9_HostAddress}}/api/User?page=1&pageSize=10
+Accept: application/json
+
+### 4.2 GET user by ID
+GET {{PR9_HostAddress}}/api/User/1
+Accept: application/json
+
+### 4.3 POST create user
+POST {{PR9_HostAddress}}/api/User
+Content-Type: application/json
+
+{
+  "loginUser": "admin_user",
+  "passwordHash": "hash123456",
+  "roleId": 1,
+  "isActive": true
+}
+
+### 4.4 PUT update user
+PUT {{PR9_HostAddress}}/api/User/1
+Content-Type: application/json
+
+{
+  "loginUser": "admin_master",
+  "passwordHash": "newhash123456",
+  "roleId": 1,
+  "isActive": true
+}
+
+### 4.5 PATCH user
+PATCH {{PR9_HostAddress}}/api/User/1
+Content-Type: application/json
+
+{
+  "isActive": false
+}
+
+### 4.6 DELETE user
+DELETE {{PR9_HostAddress}}/api/User/1
+
+### =========================================================================
+### 5. CART
+### =========================================================================
+
+### 5.1 GET all carts
+GET {{PR9_HostAddress}}/api/Cart?page=1&pageSize=10
+Accept: application/json
+
+### 5.2 GET cart by ID
+GET {{PR9_HostAddress}}/api/Cart/1
+Accept: application/json
+
+### 5.3 POST create cart
+POST {{PR9_HostAddress}}/api/Cart
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+### 5.4 PUT update cart
+PUT {{PR9_HostAddress}}/api/Cart/1
+Content-Type: application/json
+
+{
+  "userId": 2
+}
+
+### 5.5 PATCH cart
+PATCH {{PR9_HostAddress}}/api/Cart/1
+Content-Type: application/json
+
+{
+  "userId": 3
+}
+
+### 5.6 DELETE cart
+DELETE {{PR9_HostAddress}}/api/Cart/1
+
+### =========================================================================
+### 6. CART ITEM
+### =========================================================================
+
+### 6.1 GET all cart items
+GET {{PR9_HostAddress}}/api/CartItem?page=1&pageSize=10
+Accept: application/json
+
+### 6.2 GET cart item by ID
+GET {{PR9_HostAddress}}/api/CartItem/1
+Accept: application/json
+
+### 6.3 POST create cart item
+POST {{PR9_HostAddress}}/api/CartItem
+Content-Type: application/json
+
+{
+  "cartId": 1,
+  "productId": 1,
+  "quantity": 2
+}
+
+### 6.4 PUT update cart item
+PUT {{PR9_HostAddress}}/api/CartItem/1
+Content-Type: application/json
+
+{
+  "cartId": 1,
+  "productId": 1,
+  "quantity": 5
+}
+
+### 6.5 PATCH cart item
+PATCH {{PR9_HostAddress}}/api/CartItem/1
+Content-Type: application/json
+
+{
+  "quantity": 10
+}
+
+### 6.6 DELETE cart item
+DELETE {{PR9_HostAddress}}/api/CartItem/1
+
+### =========================================================================
+### 7. ORDER
+### =========================================================================
+
+### 7.1 GET all orders
+GET {{PR9_HostAddress}}/api/Order?page=1&pageSize=10
+Accept: application/json
+
+### 7.2 GET order by ID
+GET {{PR9_HostAddress}}/api/Order/1
+Accept: application/json
+
+### 7.3 POST create order
+POST {{PR9_HostAddress}}/api/Order
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "dateOrder": "2026-09-22"
+}
+
+### 7.4 PUT update order
+PUT {{PR9_HostAddress}}/api/Order/1
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "dateOrder": "2026-09-23"
+}
+
+### 7.5 PATCH order
+PATCH {{PR9_HostAddress}}/api/Order/1
+Content-Type: application/json
+
+{
+  "dateOrder": "2026-09-25"
+}
+
+### 7.6 DELETE order
+DELETE {{PR9_HostAddress}}/api/Order/1
+
+### =========================================================================
+### 8. ORDER ITEM
+### =========================================================================
+
+### 8.1 GET all order items
+GET {{PR9_HostAddress}}/api/OrderItem?page=1&pageSize=10
+Accept: application/json
+
+### 8.2 GET order item by ID
+GET {{PR9_HostAddress}}/api/OrderItem/1
+Accept: application/json
+
+### 8.3 POST create order item
+POST {{PR9_HostAddress}}/api/OrderItem
+Content-Type: application/json
+
+{
+  "orderId": 1,
+  "productId": 1,
+  "quantity": 3
+}
+
+### 8.4 PUT update order item
+PUT {{PR9_HostAddress}}/api/OrderItem/1
+Content-Type: application/json
+
+{
+  "orderId": 1,
+  "productId": 1,
+  "quantity": 4
+}
+
+### 8.5 PATCH order item
+PATCH {{PR9_HostAddress}}/api/OrderItem/1
+Content-Type: application/json
+
+{
+  "quantity": 7
+}
+
+### 8.6 DELETE order item
+DELETE {{PR9_HostAddress}}/api/OrderItem/1

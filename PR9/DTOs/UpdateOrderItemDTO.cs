@@ -1,0 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace PR9.DTOs;
+
+public class UpdateOrderItemDTO
+{
+    [Required]
+    public int OrderId { get; set; }
+
+    [Required]
+    public int ProductId { get; set; }
+
+    [Required]
+    [Range(1, 10000)]
+    public int Quantity { get; set; }
+}
