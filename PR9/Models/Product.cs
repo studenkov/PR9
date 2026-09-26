@@ -7,13 +7,6 @@ public partial class Product
 {
     public int Id { get; set; }
 
-    [NotMapped]
-    public int IdProduct
-    {
-        get => Id;
-        set => Id = value;
-    }
-
     public string Title { get; set; } = null!;
 
     public decimal Price { get; set; }

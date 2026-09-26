@@ -7,13 +7,6 @@ public partial class OrderItem
 {
     public int Id { get; set; }
 
-    [NotMapped]
-    public int IdOrderItem
-    {
-        get => Id;
-        set => Id = value;
-    }
-
     public int OrderId { get; set; }
 
     public int ProductId { get; set; }

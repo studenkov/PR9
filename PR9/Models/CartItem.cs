@@ -7,13 +7,6 @@ public partial class CartItem
 {
     public int Id { get; set; }
 
-    [NotMapped]
-    public int IdCartItem
-    {
-        get => Id;
-        set => Id = value;
-    }
-
     public int CartId { get; set; }
 
     public int ProductId { get; set; }

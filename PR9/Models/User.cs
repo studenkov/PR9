@@ -7,13 +7,6 @@ public partial class User
 {
     public int Id { get; set; }
 
-    [NotMapped]
-    public int IdUser
-    {
-        get => Id;
-        set => Id = value;
-    }
-
     public string LoginUser { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
