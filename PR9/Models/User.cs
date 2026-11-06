@@ -17,6 +17,8 @@ public partial class User
 
     public virtual Role? Role { get; set; }
 
+    public virtual ICollection<ProductReservation> ProductReservations { get; set; } = new List<ProductReservation>();
+
     [NotMapped]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

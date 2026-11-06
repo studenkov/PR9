@@ -5,37 +5,39 @@
 ### =========================================================================
 
 ### 1.1 GET all products (Пагинация)
-GET {{PR9_HostAddress}}/api/Product?page=1&pageSize=10
+GET {{PR9_HostAddress}}/api/Products?page=1&pageSize=10
 Accept: application/json
 
 ### 1.2 GET product by ID
-GET {{PR9_HostAddress}}/api/Product/1
+GET {{PR9_HostAddress}}/api/Products/1
 Accept: application/json
 
 ### 1.3 POST create product
-POST {{PR9_HostAddress}}/api/Product
+POST {{PR9_HostAddress}}/api/Products
 Content-Type: application/json
 
 {
   "title": "Ноутбук Gaming Pro",
   "price": 89990.00,
   "categoryId": 1,
-  "imagePath": "images/laptop.png"
+  "imagePath": "images/laptop.png",
+  "stockQuantity": 100
 }
 
 ### 1.4 PUT update product (Полная замена)
-PUT {{PR9_HostAddress}}/api/Product/1
+PUT {{PR9_HostAddress}}/api/Products/1
 Content-Type: application/json
 
 {
   "title": "Ноутбук Gaming Pro Ultra",
   "price": 95990.00,
   "categoryId": 1,
-  "imagePath": "images/laptop_ultra.png"
+  "imagePath": "images/laptop_ultra.png",
+  "stockQuantity": 100
 }
 
 ### 1.5 PATCH product (Merge Patch — частичное обновление)
-PATCH {{PR9_HostAddress}}/api/Product/1
+PATCH {{PR9_HostAddress}}/api/Products/1
 Content-Type: application/json
 
 {
@@ -43,7 +45,7 @@ Content-Type: application/json
 }
 
 ### 1.6 DELETE product
-DELETE {{PR9_HostAddress}}/api/Product/1
+DELETE {{PR9_HostAddress}}/api/Products/1
 
 ### =========================================================================
 ### 2. CATEGORY

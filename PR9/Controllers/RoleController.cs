@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PR9.Data;
 using PR9.DTOs;
-using PR9.Models;
+using PR9.Services;
 
 namespace PR9.Controllers;
 
@@ -9,115 +8,19 @@ namespace PR9.Controllers;
 [Route("api/[controller]")]
 public class RoleController : ControllerBase
 {
-    private readonly OnlineStoreContext _context;
-
-    public RoleController(OnlineStoreContext context)
-    {
-        _context = context;
-    }
-
-    private static RoleDTO ToDto(Role item) => new RoleDTO
-    {
-        Id = item.Id,
-        Title = item.Title,
-        CreatedAt = item.CreatedAt
-    };
+    private readonly IRoleService _service;
+    public RoleController(IRoleService service) => _service = service;
 
     [HttpGet]
-    public IActionResult GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-    {
-        if (page < 1)
-        {
-            page = 1;
-        }
-
-        if (pageSize < 1)
-        {
-            pageSize = 10;
-        }
-
-        var items = _context.Roles
-            .OrderBy(x => x.Id)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList()
-            .Select(ToDto)
-            .ToList();
-
-        return Ok(items);
-    }
-
-    [HttpGet("{id}")]
-    public IActionResult GetById(int id)
-    {
-        var item = _context.Roles.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(ToDto(item));
-    }
-
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default) { var (items, total) = await _service.GetAllAsync(page, pageSize, ct); Response.Headers["X-Total-Count"] = total.ToString(); return Ok(items); }
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id, CancellationToken ct) => await _service.GetByIdAsync(id, ct) is { } item ? Ok(item) : NotFound();
     [HttpPost]
-    public IActionResult Create(CreateRoleDTO dto)
-    {
-        var item = new Role
-        {
-            Title = dto.Title,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        _context.Roles.Add(item);
-        _context.SaveChanges();
-
-        return CreatedAtAction(nameof(GetById), new { id = item.Id }, ToDto(item));
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, UpdateRoleDTO dto)
-    {
-        var item = _context.Roles.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        item.Title = dto.Title;
-
-        _context.SaveChanges();
-        return NoContent();
-    }
-
-    [HttpPatch("{id}")]
-    public IActionResult Patch(int id, PatchRoleDTO dto)
-    {
-        var item = _context.Roles.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        if (dto.Title is not null)
-        {
-            item.Title = dto.Title;
-        }
-
-        _context.SaveChanges();
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        var item = _context.Roles.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        _context.Roles.Remove(item);
-        _context.SaveChanges();
-        return NoContent();
-    }
+    public async Task<IActionResult> Create(CreateRoleDTO dto, CancellationToken ct) { try { var item = await _service.CreateAsync(dto, ct); return CreatedAtAction(nameof(GetById), new { id = item.Id }, item); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateRoleDTO dto, CancellationToken ct) { try { return await _service.UpdateAsync(id, dto, ct) ? NoContent() : NotFound(); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    [HttpPatch("{id:int}")]
+    public async Task<IActionResult> Patch(int id, PatchRoleDTO dto, CancellationToken ct) { try { return await _service.PatchAsync(id, dto, ct) ? NoContent() : NotFound(); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id, CancellationToken ct) => await _service.DeleteAsync(id, ct) ? NoContent() : NotFound();
 }

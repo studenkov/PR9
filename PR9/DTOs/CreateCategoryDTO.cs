@@ -8,3 +8,5 @@ public class CreateCategoryDTO
     [StringLength(100)]
     public string Title { get; set; } = null!;
 }
+
+public class CreateCategoryDto : CreateCategoryDTO { }

@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PR9.Models;
 
@@ -13,8 +12,11 @@ public partial class Product
 
     public int CategoryId { get; set; }
 
+    public virtual Category? Category { get; set; }
+
+    public int StockQuantity { get; set; } = 100;
+
     public string? ImagePath { get; set; }
 
-    [NotMapped]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

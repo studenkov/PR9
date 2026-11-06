@@ -28,6 +28,8 @@ public partial class OnlineStoreContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductReservation> ProductReservations { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -65,6 +67,7 @@ public partial class OnlineStoreContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("title");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSUTCDATETIME()");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -92,6 +95,8 @@ public partial class OnlineStoreContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID_product");
             entity.Property(e => e.CategoryId).HasColumnName("category_ID");
+            entity.Property(e => e.StockQuantity).HasDefaultValue(100);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSUTCDATETIME()");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("price");
@@ -104,6 +109,14 @@ public partial class OnlineStoreContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("image_path");
+            entity.HasOne(e => e.Category).WithMany().HasForeignKey(e => e.CategoryId);
+        });
+
+        modelBuilder.Entity<ProductReservation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Product).WithMany().HasForeignKey(e => e.ProductId).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.User).WithMany(u => u.ProductReservations).HasForeignKey(e => e.UserId);
         });
 
         modelBuilder.Entity<Role>(entity =>

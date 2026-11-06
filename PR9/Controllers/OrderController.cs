@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PR9.Data;
 using PR9.DTOs;
-using PR9.Models;
+using PR9.Services;
 
 namespace PR9.Controllers;
 
@@ -9,123 +8,18 @@ namespace PR9.Controllers;
 [Route("api/[controller]")]
 public class OrderController : ControllerBase
 {
-    private readonly OnlineStoreContext _context;
-
-    public OrderController(OnlineStoreContext context)
-    {
-        _context = context;
-    }
-
-    private static OrderDTO ToDto(Order item) => new OrderDTO
-    {
-        Id = item.Id,
-        UserId = item.UserId,
-        DateOrder = item.DateOrder,
-        CreatedAt = item.CreatedAt
-    };
-
+    private readonly IOrderService _service;
+    public OrderController(IOrderService service) => _service = service;
     [HttpGet]
-    public IActionResult GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-    {
-        if (page < 1)
-        {
-            page = 1;
-        }
-
-        if (pageSize < 1)
-        {
-            pageSize = 10;
-        }
-
-        var items = _context.Orders
-            .OrderBy(x => x.Id)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList()
-            .Select(ToDto)
-            .ToList();
-
-        return Ok(items);
-    }
-
-    [HttpGet("{id}")]
-    public IActionResult GetById(int id)
-    {
-        var item = _context.Orders.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(ToDto(item));
-    }
-
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default) { var (items, total) = await _service.GetAllAsync(page, pageSize, ct); Response.Headers["X-Total-Count"] = total.ToString(); return Ok(items); }
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id, CancellationToken ct) => await _service.GetByIdAsync(id, ct) is { } item ? Ok(item) : NotFound();
     [HttpPost]
-    public IActionResult Create(CreateOrderDTO dto)
-    {
-        var item = new Order
-        {
-            UserId = dto.UserId,
-            DateOrder = dto.DateOrder,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        _context.Orders.Add(item);
-        _context.SaveChanges();
-
-        return CreatedAtAction(nameof(GetById), new { id = item.Id }, ToDto(item));
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, UpdateOrderDTO dto)
-    {
-        var item = _context.Orders.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        item.UserId = dto.UserId;
-        item.DateOrder = dto.DateOrder;
-
-        _context.SaveChanges();
-        return NoContent();
-    }
-
-    [HttpPatch("{id}")]
-    public IActionResult Patch(int id, PatchOrderDTO dto)
-    {
-        var item = _context.Orders.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        if (dto.UserId is not null)
-        {
-            item.UserId = dto.UserId.Value;
-        }
-
-        if (dto.DateOrder is not null)
-        {
-            item.DateOrder = dto.DateOrder.Value;
-        }
-
-        _context.SaveChanges();
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        var item = _context.Orders.FirstOrDefault(x => x.Id == id);
-        if (item is null)
-        {
-            return NotFound();
-        }
-
-        _context.Orders.Remove(item);
-        _context.SaveChanges();
-        return NoContent();
-    }
+    public async Task<IActionResult> Create(CreateOrderDTO dto, CancellationToken ct) { try { var item = await _service.CreateAsync(dto, ct); return CreatedAtAction(nameof(GetById), new { id = item.Id }, item); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, UpdateOrderDTO dto, CancellationToken ct) { try { return await _service.UpdateAsync(id, dto, ct) ? NoContent() : NotFound(); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    [HttpPatch("{id:int}")]
+    public async Task<IActionResult> Patch(int id, PatchOrderDTO dto, CancellationToken ct) { try { return await _service.PatchAsync(id, dto, ct) ? NoContent() : NotFound(); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id, CancellationToken ct) => await _service.DeleteAsync(id, ct) ? NoContent() : NotFound();
 }
