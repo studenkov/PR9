@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using PR9.Models;
 
-namespace PR9.Data;
+namespace PR9.Models;
 
-public partial class OnlineStoreContext : DbContext
+public partial class AppDbContext : DbContext
 {
-    public OnlineStoreContext()
+    public AppDbContext()
     {
     }
 
-    public OnlineStoreContext(DbContextOptions<OnlineStoreContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
     }

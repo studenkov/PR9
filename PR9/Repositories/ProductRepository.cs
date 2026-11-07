@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using PR9.Data;
+
 using PR9.Models;
 
 namespace PR9.Repositories;
 
 public class ProductRepository : IProductRepository
 {
-    private readonly OnlineStoreContext _context;
-    public ProductRepository(OnlineStoreContext context) => _context = context;
+    private readonly AppDbContext _context;
+    public ProductRepository(AppDbContext context) => _context = context;
 
     public Task<List<Product>> GetAllAsync(int page, int pageSize, CancellationToken ct) =>
         _context.Products.Include(p => p.Category).OrderBy(p => p.Id)

@@ -1,4 +1,4 @@
-using PR9.DTOs;
+using PR9.Dtos;
 
 namespace PR9.Services;
 

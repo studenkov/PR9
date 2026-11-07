@@ -1,5 +1,5 @@
 using AutoMapper;
-using PR9.DTOs;
+using PR9.Dtos;
 using PR9.Models;
 using PR9.Services;
 
@@ -14,6 +14,7 @@ public class MappingProfile : Profile
         CreateMap<UpdateProductDto, Product>().ForMember(d => d.Category, o => o.Ignore());
         CreateMap<Category, CategoryDto>();
         CreateMap<CreateCategoryDto, Category>();
+        CreateMap<UpdateCategoryDTO, Category>();
         CreateMap<CreateCategoryDTO, Category>();
         CreateMap<Category, CategoryDTO>();
         CreateMap<Role, RoleDTO>();

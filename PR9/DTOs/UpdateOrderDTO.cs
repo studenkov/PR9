@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PR9.DTOs;
+namespace PR9.Dtos;
 
 public class UpdateOrderDTO
 {

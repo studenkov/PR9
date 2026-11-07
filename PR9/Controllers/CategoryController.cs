@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PR9.DTOs;
+using PR9.Dtos;
 using PR9.Services;
 
 namespace PR9.Controllers;

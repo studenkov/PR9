@@ -1,5 +1,5 @@
 using AutoMapper;
-using PR9.DTOs;
+using PR9.Dtos;
 using PR9.Models;
 using PR9.Mapping;
 using PR9.Repositories;
@@ -16,26 +16,26 @@ public class ProductService : IProductService
     {
         page = Math.Max(1, page); pageSize = Math.Clamp(pageSize, 1, 100);
         var rows = await _repository.GetAllAsync(page, pageSize, ct);
-        return (ProductMapper.ToDtos(rows), await _repository.CountAsync(ct));
+        return (_mapper.Map<List<ProductDto>>(rows), await _repository.CountAsync(ct));
     }
     public async Task<ProductDto?> GetByIdAsync(int id, CancellationToken ct)
     {
         var product = await _repository.GetByIdAsync(id, ct);
-        return product is null ? null : ProductMapper.ToDto(product);
+        return product is null ? null : _mapper.Map<ProductDto>(product);
     }
     public async Task<ProductDto> CreateAsync(CreateProductDto dto, CancellationToken ct)
     {
         if (await _repository.FindCategoryAsync(dto.CategoryId, ct) is null) throw MissingRelated(dto.CategoryId);
         var product = _mapper.Map<Product>(dto);
         await _repository.AddAsync(product); await _repository.SaveChangesAsync(ct);
-        return ProductMapper.ToDto(await _repository.GetByIdAsync(product.Id, ct) ?? product);
+        return _mapper.Map<ProductDto>(await _repository.GetByIdAsync(product.Id, ct) ?? product);
     }
     public async Task<ProductDto?> UpdateAsync(int id, UpdateProductDto dto, CancellationToken ct)
     {
         var product = await _repository.GetByIdAsync(id, ct); if (product is null) return null;
         if (await _repository.FindCategoryAsync(dto.CategoryId, ct) is null) throw MissingRelated(dto.CategoryId);
         _mapper.Map(dto, product); _repository.Update(product); await _repository.SaveChangesAsync(ct);
-        return ProductMapper.ToDto(await _repository.GetByIdAsync(id, ct) ?? product);
+        return _mapper.Map<ProductDto>(await _repository.GetByIdAsync(id, ct) ?? product);
     }
     public async Task<ProductDto?> PatchAsync(int id, PatchProductDto dto, CancellationToken ct)
     {
@@ -47,7 +47,7 @@ public class ProductService : IProductService
         if (dto.ImagePath is not null) product.ImagePath = dto.ImagePath;
         if (dto.StockQuantity is int stock) product.StockQuantity = stock;
         _repository.Update(product); await _repository.SaveChangesAsync(ct);
-        return ProductMapper.ToDto(await _repository.GetByIdAsync(id, ct) ?? product);
+        return _mapper.Map<ProductDto>(await _repository.GetByIdAsync(id, ct) ?? product);
     }
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
     {

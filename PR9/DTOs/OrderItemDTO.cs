@@ -1,6 +1,6 @@
 using System;
 
-namespace PR9.DTOs;
+namespace PR9.Dtos;
 
 public class OrderItemDTO
 {

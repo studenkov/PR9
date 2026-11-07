@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using PR9.Data;
+
+using PR9.Models;
 using PR9.Repositories;
 using PR9.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext
-builder.Services.AddDbContext<OnlineStoreContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Scoped: DbContext is scoped to one HTTP request by default, so dependent repositories and services

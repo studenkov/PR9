@@ -1,5 +1,5 @@
 using AutoMapper;
-using PR9.DTOs;
+using PR9.Dtos;
 using PR9.Models;
 using PR9.Repositories;
 
