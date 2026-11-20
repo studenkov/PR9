@@ -11,7 +11,7 @@ public interface IProductService
     Task<ProductDto?> PatchAsync(int id, PatchProductDto dto, CancellationToken ct);
     Task<bool> DeleteAsync(int id, CancellationToken ct);
     Task<ProductReservationDto> ReserveProductAsync(int productId, int userId, int quantity, CancellationToken ct);
-    Task<ProductReservationDto?> CancelReservationAsync(int reservationId, CancellationToken ct);
+    Task<ProductReservationDto?> CancelReservationAsync(int reservationId, int currentUserId, bool isAdmin, CancellationToken ct);
 }
 
 public class ProductReservationDto

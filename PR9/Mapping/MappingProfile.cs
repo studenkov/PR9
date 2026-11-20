@@ -15,14 +15,17 @@ public class MappingProfile : Profile
         CreateMap<Category, CategoryDto>();
         CreateMap<CreateCategoryDto, Category>();
         CreateMap<UpdateCategoryDTO, Category>();
-        CreateMap<CreateCategoryDTO, Category>();
         CreateMap<Category, CategoryDTO>();
         CreateMap<Role, RoleDTO>();
         CreateMap<CreateRoleDTO, Role>();
         CreateMap<UpdateRoleDTO, Role>();
-        CreateMap<User, UserDTO>();
-        CreateMap<CreateUserDTO, User>();
-        CreateMap<UpdateUserDTO, User>();
+        CreateMap<AppUser, UserDTO>()
+            .ForMember(d => d.Login, o => o.MapFrom(s => s.Login))
+            .ForMember(d => d.LoginUser, o => o.MapFrom(s => s.Login));
+        CreateMap<CreateUserDTO, AppUser>()
+            .ForMember(d => d.Login, o => o.MapFrom(s => s.LoginUser));
+        CreateMap<UpdateUserDTO, AppUser>()
+            .ForMember(d => d.Login, o => o.MapFrom(s => s.LoginUser));
         CreateMap<Cart, CartDTO>();
         CreateMap<CreateCartDTO, Cart>();
         CreateMap<UpdateCartDTO, Cart>();

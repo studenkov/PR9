@@ -8,7 +8,7 @@ public interface IProductRepository
     Task<int> CountAsync(CancellationToken ct);
     Task<Product?> GetByIdAsync(int id, CancellationToken ct);
     Task<Category?> FindCategoryAsync(int categoryId, CancellationToken ct);
-    Task<User?> FindUserAsync(int userId, CancellationToken ct);
+    Task<AppUser?> FindUserAsync(int userId, CancellationToken ct);
     Task AddAsync(Product product);
     void Update(Product product);
     void Remove(Product product);

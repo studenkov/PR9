@@ -65,10 +65,14 @@ public class ProductService : IProductService
         await _repository.AddReservationAsync(reservation); await _repository.SaveChangesAsync(ct);
         return _mapper.Map<ProductReservationDto>(reservation);
     }
-    public async Task<ProductReservationDto?> CancelReservationAsync(int reservationId, CancellationToken ct)
+    public async Task<ProductReservationDto?> CancelReservationAsync(int reservationId, int currentUserId, bool isAdmin, CancellationToken ct)
     {
         var reservation = await _repository.GetReservationByIdAsync(reservationId, ct);
         if (reservation is null || !reservation.IsActive) return null;
+        if (!isAdmin && reservation.UserId != currentUserId)
+        {
+            throw new UnauthorizedAccessException("Нет прав для отмены чужой брони.");
+        }
         reservation.Product.StockQuantity += reservation.Quantity; reservation.IsActive = false;
         await _repository.SaveChangesAsync(ct); return _mapper.Map<ProductReservationDto>(reservation);
     }

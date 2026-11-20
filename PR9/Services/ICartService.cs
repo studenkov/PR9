@@ -4,7 +4,7 @@ namespace PR9.Services;
 
 public interface ICartService
 {
-    Task<(List<CartDTO> Items, int TotalCount)> GetAllAsync(int page, int pageSize, CancellationToken ct);
+    Task<(List<CartDTO> Items, int TotalCount)> GetAllAsync(int page, int pageSize, int? userId, CancellationToken ct);
     Task<CartDTO?> GetByIdAsync(int id, CancellationToken ct);
     Task<CartDTO> CreateAsync(CreateCartDTO dto, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateCartDTO dto, CancellationToken ct);

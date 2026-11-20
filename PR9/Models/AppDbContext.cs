@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using PR9.Models;
 
 namespace PR9.Models;
 
@@ -32,7 +31,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<AppUser> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,7 +66,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("title");
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSUTCDATETIME()");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -96,7 +95,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("ID_product");
             entity.Property(e => e.CategoryId).HasColumnName("category_ID");
             entity.Property(e => e.StockQuantity).HasDefaultValue(100);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSUTCDATETIME()");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("price");
@@ -132,23 +131,30 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("title");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<AppUser>(entity =>
         {
+            entity.ToTable("Users");
             entity.HasKey(e => e.Id).HasName("PK__Users__D7B4671ED39BD889");
 
-            entity.HasIndex(e => e.LoginUser, "UQ__Users__12D0D37FB4B53D8F").IsUnique();
+            entity.HasIndex(e => e.Login, "UQ__Users__12D0D37FB4B53D8F").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID_user");
-            entity.Property(e => e.LoginUser)
-                .HasMaxLength(50)
+            entity.Property(e => e.Login)
+                .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("login_user");
             entity.Property(e => e.PasswordHash)
-                .HasMaxLength(256)
+                .HasMaxLength(500)
                 .IsUnicode(false)
                 .HasColumnName("password_hash");
+            entity.Property(e => e.Role)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("role")
+                .HasDefaultValue("Customer");
             entity.Property(e => e.RoleId).HasColumnName("role_ID");
             entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.HasOne(e => e.RoleNavigation).WithMany().HasForeignKey(e => e.RoleId);
         });
 
         OnModelCreatingPartial(modelBuilder);

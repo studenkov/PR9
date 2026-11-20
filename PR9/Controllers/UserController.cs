@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PR9.Dtos;
 using PR9.Services;
@@ -6,20 +7,66 @@ namespace PR9.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "AdminOnly")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _service;
+
     public UserController(IUserService service) => _service = service;
+
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default) { var (items, total) = await _service.GetAllAsync(page, pageSize, ct); Response.Headers["X-Total-Count"] = total.ToString(); return Ok(items); }
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default)
+    {
+        var (items, total) = await _service.GetAllAsync(page, pageSize, ct);
+        Response.Headers["X-Total-Count"] = total.ToString();
+        return Ok(items);
+    }
+
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id, CancellationToken ct) => await _service.GetByIdAsync(id, ct) is { } item ? Ok(item) : NotFound();
+    public async Task<IActionResult> GetById(int id, CancellationToken ct) =>
+        await _service.GetByIdAsync(id, ct) is { } item ? Ok(item) : NotFound();
+
     [HttpPost]
-    public async Task<IActionResult> Create(CreateUserDTO dto, CancellationToken ct) { try { var item = await _service.CreateAsync(dto, ct); return CreatedAtAction(nameof(GetById), new { id = item.Id }, item); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    public async Task<IActionResult> Create(CreateUserDTO dto, CancellationToken ct)
+    {
+        try
+        {
+            var item = await _service.CreateAsync(dto, ct);
+            return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, UpdateUserDTO dto, CancellationToken ct) { try { return await _service.UpdateAsync(id, dto, ct) ? NoContent() : NotFound(); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    public async Task<IActionResult> Update(int id, UpdateUserDTO dto, CancellationToken ct)
+    {
+        try
+        {
+            return await _service.UpdateAsync(id, dto, ct) ? NoContent() : NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpPatch("{id:int}")]
-    public async Task<IActionResult> Patch(int id, PatchUserDTO dto, CancellationToken ct) { try { return await _service.PatchAsync(id, dto, ct) ? NoContent() : NotFound(); } catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); } }
+    public async Task<IActionResult> Patch(int id, PatchUserDTO dto, CancellationToken ct)
+    {
+        try
+        {
+            return await _service.PatchAsync(id, dto, ct) ? NoContent() : NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id, CancellationToken ct) => await _service.DeleteAsync(id, ct) ? NoContent() : NotFound();
+    public async Task<IActionResult> Delete(int id, CancellationToken ct) =>
+        await _service.DeleteAsync(id, ct) ? NoContent() : NotFound();
 }

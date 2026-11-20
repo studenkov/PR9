@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PR9.Dtos;
 using PR9.Services;
@@ -6,6 +7,7 @@ namespace PR9.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class OrderItemController : ControllerBase
 {
     private readonly IOrderItemService _service;
