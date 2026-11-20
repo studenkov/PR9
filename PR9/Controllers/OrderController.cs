@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using PR9.Authorization;
 using PR9.Dtos;
 using PR9.Services;
@@ -9,6 +10,7 @@ namespace PR9.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[EnableRateLimiting("OrderPolicy")]
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _service;

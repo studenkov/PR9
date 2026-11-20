@@ -9,11 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Spinner } from "@/components/ui/spinner"
@@ -23,7 +19,6 @@ import {
   getToken,
   authApi,
   apiRequest,
-  API_BASE_URL,
   type JwtUser,
   type ApiResponse,
 } from "@/lib/api"
@@ -151,10 +146,9 @@ export default function DashboardPage() {
     <div className="container mx-auto max-w-4xl space-y-6 p-4 md:p-8">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Панель управления</h1>
-          <p className="text-xs text-muted-foreground font-mono mt-0.5">
-            {API_BASE_URL}
-          </p>
+          <h1 className="text-xl font-semibold tracking-tight">
+            Панель управления
+          </h1>
         </div>
         <Button variant="outline" size="sm" onClick={handleLogout}>
           Выйти
@@ -170,10 +164,10 @@ export default function DashboardPage() {
           <CardContent>
             <div className="grid grid-cols-[140px_1fr] items-center gap-y-3 text-sm">
               <span className="text-muted-foreground">Логин</span>
-              <span className="font-medium text-right">{username}</span>
+              <span className="text-right font-medium">{username}</span>
 
               <span className="text-muted-foreground">ID пользователя</span>
-              <span className="font-mono text-xs text-right">{userId}</span>
+              <span className="text-right font-mono text-xs">{userId}</span>
 
               <span className="text-muted-foreground">Роль</span>
               <span className="text-right">
@@ -181,7 +175,9 @@ export default function DashboardPage() {
               </span>
 
               <span className="text-muted-foreground">Истекает</span>
-              <span className="font-mono text-xs text-right">{expirationTime}</span>
+              <span className="text-right font-mono text-xs">
+                {expirationTime}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -192,7 +188,7 @@ export default function DashboardPage() {
             <CardDescription>JWT для авторизации запросов</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="max-h-24 overflow-y-auto rounded-md border bg-muted/40 p-2.5 font-mono text-[11px] break-all select-all text-muted-foreground">
+            <div className="max-h-24 overflow-y-auto rounded-md border bg-muted/40 p-2.5 font-mono text-[11px] break-all text-muted-foreground select-all">
               {displayToken}
             </div>
             <Button
@@ -211,7 +207,9 @@ export default function DashboardPage() {
         <Card className="flex flex-col justify-between">
           <CardHeader>
             <CardTitle>Заказы</CardTitle>
-            <CardDescription>Проверка доступа (Resource и Role policy)</CardDescription>
+            <CardDescription>
+              Проверка доступа (Resource и Role policy)
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FieldGroup>
@@ -270,7 +268,7 @@ export default function DashboardPage() {
             <CardTitle>Безопасность и лимиты</CardTitle>
             <CardDescription>Проверка статус-кодов</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="h-full">
             <Button
               variant="outline"
               size="sm"
@@ -311,7 +309,9 @@ export default function DashboardPage() {
               {responseBodyText}
             </pre>
           ) : (
-            <p className="text-xs text-muted-foreground">Запросов пока не было.</p>
+            <p className="text-xs text-muted-foreground">
+              Запросов пока не было.
+            </p>
           )}
         </CardContent>
       </Card>

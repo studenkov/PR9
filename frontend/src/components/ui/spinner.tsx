@@ -1,9 +1,15 @@
 import { cn } from "cn"
-import { Spinner as SpinnerIcon } from "@phosphor-icons/react/Spinner"
+import { LoaderCircle } from "lucide-react"
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
-    <SpinnerIcon data-slot="spinner" role="status" aria-label="Loading" className={cn("size-4 animate-spin", className)} {...props} />
+    <LoaderCircle
+      data-slot="spinner"
+      role="status"
+      aria-label="Loading"
+      className={cn("size-4 animate-spin", className)}
+      {...props}
+    />
   )
 }
 
